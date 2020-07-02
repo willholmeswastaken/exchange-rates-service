@@ -4,6 +4,10 @@
     "plugins": [
         "@typescript-eslint"
     ],
+    "rules":{
+       "import/no-unresolved": "off",
+       "no-useless-constructor": "off"
+    },
     "extends": [
         "plugin:shopify/esnext",
         "eslint:recommended",

@@ -1,5 +1,7 @@
 import {IGetExchangeRatesResponse} from './models/consumer/responses/IGetExchangeRatesResponse';
-import latestRatesAdapter from './adapters/latest-rates-adapter';
+import LatestRatesAdapter from './adapters/latestRatesAdapter';
+import {IAdapter} from './adapters/IAdapter';
+import {IExchangeRate} from './models/consumer/IExchangeRate';
 
 import express = require('express');
 import cc = require('currency-codes');
@@ -26,7 +28,8 @@ app.get('/rates/:currency', async (req, res) => {
         requestedOn: new Date().toISOString(),
         rates: [],
       };
-      response.rates = await latestRatesAdapter(req.params.currency);
+      const adapter: IAdapter<IExchangeRate[]> = new LatestRatesAdapter(req.params.currency);
+      response.rates = await adapter.execute();
       res.send(response);
     } catch (err) {
       res.status(500).send(err.message);
