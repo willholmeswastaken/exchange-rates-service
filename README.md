@@ -7,7 +7,7 @@ This project is a side project intended to brush up on my node / typescript / re
 - Add an endpoint to GET all the latest exchange rates ✅
 - Add an endpoint to GET a comparison of all currencies compared to the one passed in ✅
 - Allow the above call to have a time period passed in i.e. days, weeks, months.
-- Add unit / integration tests
+- Add unit / integration tests ✅
 
 ### Frontend
 - Setup a simple frontend in react
