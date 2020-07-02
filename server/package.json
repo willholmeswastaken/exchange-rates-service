@@ -9,7 +9,7 @@
     "build": "rimraf ./build && tsc",
     "test": "jest",
     "coverage": "jest --coverage",
-    "start": "npm run build && node build/index.js",
+    "start": "node build/index.js",
     "start:dev": "nodemon"
   },
   "keywords": [],
