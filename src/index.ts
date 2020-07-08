@@ -39,7 +39,7 @@ app.get('/rates/:currency', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+app.listen((process.env.PORT || 3000), () => {
   // eslint-disable-next-line no-console
   console.log('App is listening on port 3000!');
 });
