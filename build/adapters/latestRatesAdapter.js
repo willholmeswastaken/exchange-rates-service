@@ -39,20 +39,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LatestRatesAdapter = void 0;
 var axios_1 = __importDefault(require("axios"));
 var config_json_1 = __importDefault(require("../config.json"));
-var getLatestRates = function (currency) { return __awaiter(void 0, void 0, void 0, function () {
-    var response;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, axios_1.default.get(config_json_1.default.EXCHANGE_RATES_BASE_URL + "?base=" + currency)];
-            case 1:
-                response = _a.sent();
-                return [2 /*return*/, Object.entries(response.rates).map(function (_a) {
-                        var key = _a[0], val = _a[1];
-                        return ({ name: key, value: parseFloat(val).toFixed(2) });
-                    })];
-        }
-    });
-}); };
-exports.default = getLatestRates;
+var LatestRatesAdapter = /** @class */ (function () {
+    function LatestRatesAdapter(currency) {
+        this.currency = currency;
+    }
+    LatestRatesAdapter.prototype.execute = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, axios_1.default.get(config_json_1.default.EXCHANGE_RATES_BASE_URL + "?base=" + this.currency.toUpperCase())];
+                    case 1: return [4 /*yield*/, (_a.sent()).data];
+                    case 2:
+                        response = _a.sent();
+                        return [2 /*return*/, Object.entries(response.rates).map(function (_a) {
+                                var key = _a[0], val = _a[1];
+                                return ({ name: key, value: parseFloat(val).toFixed(2) });
+                            })];
+                }
+            });
+        });
+    };
+    return LatestRatesAdapter;
+}());
+exports.LatestRatesAdapter = LatestRatesAdapter;
+exports.default = LatestRatesAdapter;

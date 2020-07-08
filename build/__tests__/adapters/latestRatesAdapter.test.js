@@ -39,54 +39,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var latestRatesAdapter_1 = __importDefault(require("./adapters/latestRatesAdapter"));
-var express = require("express");
-var cc = require("currency-codes");
-var cors = require("cors");
-var morgan = require("morgan");
-var helmet = require("helmet");
-var app = express();
-app.use(helmet());
-app.use(cors());
-app.use(morgan(':method :url :status - :response-time ms'));
-app.use(express.json());
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
-app.get('/rates/:currency', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, adapter, _a, err_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                if (!cc.code(req.params.currency)) return [3 /*break*/, 5];
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 3, , 4]);
-                response = {
-                    baseCurrency: req.params.currency,
-                    requestedOn: new Date().toISOString(),
-                    rates: [],
-                };
-                adapter = new latestRatesAdapter_1.default(req.params.currency);
-                _a = response;
-                return [4 /*yield*/, adapter.execute()];
-            case 2:
-                _a.rates = _b.sent();
-                res.send(response);
-                return [3 /*break*/, 4];
-            case 3:
-                err_1 = _b.sent();
-                res.status(500).send(err_1.message);
-                return [3 /*break*/, 4];
-            case 4: return [3 /*break*/, 6];
-            case 5:
-                res.status(400).send('Not a valid currency code!');
-                _b.label = 6;
-            case 6: return [2 /*return*/];
-        }
-    });
-}); });
-app.listen(3000, function () {
-    // eslint-disable-next-line no-console
-    console.log('App is listening on port 3000!');
+var axios_1 = __importDefault(require("axios"));
+var latestRatesAdapter_1 = __importDefault(require("../../adapters/latestRatesAdapter"));
+jest.mock('axios');
+var mockedAxios = axios_1.default;
+describe('LatestRatesAdapter', function () {
+    it('performs execute successfully', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var base, expectedResponse, adapter, res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    base = "GBP";
+                    expectedResponse = {
+                        base: base,
+                        date: new Date().toISOString(),
+                        rates: {
+                            HKD: 1,
+                        },
+                    };
+                    adapter = new latestRatesAdapter_1.default(base);
+                    mockedAxios.get.mockResolvedValue({ data: expectedResponse });
+                    return [4 /*yield*/, adapter.execute()];
+                case 1:
+                    res = _a.sent();
+                    // Assert
+                    expect(mockedAxios.get).toHaveBeenCalled();
+                    expect(res).toEqual(Object.entries(expectedResponse.rates).map(function (_a) {
+                        var key = _a[0], val = _a[1];
+                        return ({ name: key, value: parseFloat(val).toFixed(2) });
+                    }));
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
