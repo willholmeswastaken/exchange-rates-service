@@ -1,4 +1,0 @@
-{
-    "EXCHANGE_RATES_BASE_URL": "https://api.exchangeratesapi.io/latest",
-    "EXCHANGE_RATE_HISTORY_API_URL": "https://api.exchangeratesapi.io/history"
-}
